@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kommunikation" />
+  <meta name="theme-color" content="#0b132b" />
+  <title>Kommunikation</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230b132b'/%3E%3Cpath d='M256 112c-97.2 0-176 66.3-176 148 0 38.6 17.6 73.7 46.5 100.1L104 416l68.7-26.2c25.8 8.3 53.9 12.9 83.3 12.9 97.2 0 176-66.3 176-148S353.2 112 256 112z' fill='%2338bdf8'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230b132b'/%3E%3Cpath d='M256 112c-97.2 0-176 66.3-176 148 0 38.6 17.6 73.7 46.5 100.1L104 416l68.7-26.2c25.8 8.3 53.9 12.9 83.3 12.9 97.2 0 176-66.3 176-148S353.2 112 256 112z' fill='%2338bdf8'/%3E%3C/svg%3E" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(160deg, #080e21 0%, #0f1c3f 50%, #132552 100%);
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      padding: 20px 16px 32px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    header {
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+    }
+
+    .datetime {
+      margin-top: 6px;
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .clock {
+      font-size: 2.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 22px 12px;
+      border-radius: 22px;
+      text-decoration: none;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .tile:active {
+      transform: scale(0.97);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    }
+
+    .icon-box svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .bg-whatsapp { background: #25D366; }
+    .bg-facebook { background: #1877F2; }
+    .bg-gmail    { background: #ffffff; }
+    .bg-telegram { background: #26A5E4; }
+    .bg-sms      { background: #10B981; }
+    .bg-phone    { background: #8B5CF6; }
+
+    .label {
+      font-size: 1.18rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-box input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 1.05rem;
+      padding: 10px 8px 10px 10px;
+    }
+
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
+
+    .search-box button {
+      flex-shrink: 0;
+      background: #38bdf8;
+      color: #082f49;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .search-box button:active {
+      opacity: 0.85;
+    }
+
+    details.notes-drawer {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+    }
+
+    details.notes-drawer summary {
+      list-style: none;
+      padding: 14px 16px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    details.notes-drawer summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.notes-drawer summary::after {
+      content: "▾";
+      font-size: 1.2rem;
+      color: #94a3b8;
+      transition: transform 0.2s ease;
+    }
+
+    details.notes-drawer[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    .notes-content {
+      padding: 0 14px 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(8, 14, 33, 0.45);
+      color: #f8fafc;
+      font-family: inherit;
+      font-size: 1.05rem;
+      line-height: 1.45;
+      padding: 12px;
+      resize: vertical;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Kommunikation</h1>
+      <div class="datetime" id="dateDisplay">Sonntag, 22. November</div>
+      <div class="clock" id="clockDisplay">18:30</div>
+    </header>
+
+    <main class="grid">
+      <a class="tile" href="https://api.whatsapp.com/send?text=%20">
+        <div class="icon-box bg-whatsapp">
+          <svg viewBox="0 0 32 32" fill="#ffffff">
+            <path d="M16.01 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.59 4.46 1.71 6.4L3.1 28.8l6.58-1.73a12.76 12.76 0 0 0 6.33 1.68h.01c7.06 0 12.8-5.74 12.8-12.8 0-3.42-1.33-6.64-3.75-9.05a12.72 12.72 0 0 0-9.06-3.7zm0 23.38h-.01a10.6 10.6 0 0 1-5.4-1.48l-.39-.23-3.9 1.02 1.04-3.8-.25-.4a10.57 10.57 0 0 1-1.63-5.64c0-5.85 4.76-10.61 10.62-10.61 2.84 0 5.5 1.11 7.5 3.11a10.55 10.55 0 0 1 3.11 7.5c0 5.86-4.76 10.62-10.69 10.62zm5.82-7.95c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.14 3.09 1.3 3.3c.16.21 2.25 3.43 5.45 4.81.76.33 1.36.53 1.82.67.76.24 1.46.21 2.01.13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/>
+          </svg>
+        </div>
+        <span class="label">WhatsApp</span>
+      </a>
+
+      <a class="tile" href="fb://feed" onclick="setTimeout(function(){ window.location.href='https://m.facebook.com'; }, 600);">
+        <div class="icon-box bg-facebook">
+          <svg viewBox="0 0 32 32" fill="#ffffff">
+            <path d="M18.6 28V17.1h3.65l.55-4.25H18.6v-2.71c0-1.23.34-2.07 2.11-2.07h2.25V4.26c-.39-.05-1.73-.17-3.28-.17-3.25 0-5.47 1.98-5.47 5.62v3.14H10.5v4.25h3.71V28h4.39z"/>
+          </svg>
+        </div>
+        <span class="label">Facebook</span>
+      </a>
+
+      <a class="tile" href="intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.google.android.gm;end" onclick="setTimeout(function(){ window.location.href='https://mail.google.com'; }, 700);">
+        <div class="icon-box bg-gmail">
+          <svg viewBox="0 0 32 32">
+            <path fill="#EA4335" d="M6 9.5v13h4V14l6 4.5 6-4.5v8.5h4v-13L16 17 6 9.5z"/>
+            <path fill="#4285F4" d="M6 9.5h4v13H6z"/>
+            <path fill="#34A853" d="M22 9.5h4v13h-4z"/>
+            <path fill="#FBBC05" d="M6 9.5L16 17l10-7.5-2-1.5-8 6-8-6-2 1.5z"/>
+          </svg>
+        </div>
+        <span class="label">Gmail</span>
+      </a>
+
+      <a class="tile" href="tg://resolve" onclick="setTimeout(function(){ window.location.href='https://t.me'; }, 600);">
+        <div class="icon-box bg-telegram">
+          <svg viewBox="0 0 32 32" fill="#ffffff">
+            <path d="M26.9 6.6L4.8 15.1c-1.5.6-1.5 1.4-.3 1.8l5.7 1.8 13.1-8.3c.6-.4 1.2-.2.7.2L13.4 20.2l-.4 5.8c.6 0 .8-.3 1.1-.6l2.7-2.6 5.6 4.1c1 .6 1.8.3 2-.9l3.6-17.1c.4-1.5-.6-2.2-1.1-2.3z"/>
+          </svg>
+        </div>
+        <span class="label">Telegram</span>
+      </a>
+
+      <a class="tile" href="sms:">
+        <div class="icon-box bg-sms">
+          <svg viewBox="0 0 32 32" fill="#ffffff">
+            <path d="M16 5C9.37 5 4 9.48 4 15c0 2.74 1.32 5.22 3.46 7.03L6.2 27l5.35-2.14c1.4.41 2.9.64 4.45.64 6.63 0 12-4.48 12-10S22.63 5 16 5zm-5 11.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+          </svg>
+        </div>
+        <span class="label">SMS</span>
+      </a>
+
+      <a class="tile" href="tel:">
+        <div class="icon-box bg-phone">
+          <svg viewBox="0 0 32 32" fill="#ffffff">
+            <path d="M24.8 20.4c-1.5 0-2.9-.2-4.3-.7-.4-.1-.9 0-1.2.3l-2.7 2.7c-3.4-1.7-6.2-4.5-7.9-7.9l2.7-2.7c.3-.3.4-.8.3-1.2-.5-1.4-.7-2.8-.7-4.3 0-.7-.5-1.2-1.2-1.2H6.2C5.5 5.4 5 5.9 5 6.6 5 17.9 14.1 27 25.4 27c.7 0 1.2-.5 1.2-1.2v-4.2c0-.7-.5-1.2-1.8-1.2z"/>
+          </svg>
+        </div>
+        <span class="label">Telefon</span>
+      </a>
+    </main>
+
+    <form class="search-box" action="https://www.google.com/search" method="get" target="_blank">
+      <input type="text" name="q" placeholder="Bei Google suchen …" autocomplete="off" />
+      <button type="submit">Suchen</button>
+    </form>
+
+    <details class="notes-drawer">
+      <summary>Notizen</summary>
+      <div class="notes-content">
+        <textarea id="notesArea" aria-label="Notizen"></textarea>
+      </div>
+    </details>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+      const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+      const dayName = days[now.getDay()];
+      const dayNum = now.getDate();
+      const monthName = months[now.getMonth()];
+      document.getElementById("dateDisplay").textContent = dayName + ", " + dayNum + ". " + monthName;
+
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      document.getElementById("clockDisplay").textContent = hh + ":" + mm;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 15000);
+
+    const notesArea = document.getElementById("notesArea");
+    const savedNotes = localStorage.getItem("komm_hub_notes");
+    if (savedNotes !== null) {
+      notesArea.value = savedNotes;
+    }
+    notesArea.addEventListener("input", function () {
+      localStorage.setItem("komm_hub_notes", notesArea.value);
+    });
+  </script>
+</body>
+</html>
